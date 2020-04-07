@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using API.Domain;
 using API.Domain.Models;
@@ -35,7 +36,7 @@ namespace API
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlite("Data Source=feedlot.db");
+                options.UseSqlite($"Data Source={Directory.GetCurrentDirectory()}/feedlot.db");
             });
 
             services.AddCors(options =>
