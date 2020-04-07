@@ -37,6 +37,7 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlite($"Data Source={Directory.GetCurrentDirectory()}/feedlot.db");
+                Console.WriteLine(Directory.GetCurrentDirectory());
             });
 
             services.AddCors(options =>
@@ -90,8 +91,11 @@ namespace API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
         {
+            context.Database.Migrate();
+            context.Feedlots.Add(new Feedlot { Name = "Brians Feedlot", Owner = "Brian" });
+            context.SaveChanges();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

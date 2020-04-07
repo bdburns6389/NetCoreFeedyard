@@ -1,0 +1,7 @@
+obj
+bin
+node_modules
+publish
+appsettings.json
+appsettings.Development.json
+feedlot.db

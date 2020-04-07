@@ -29,6 +29,7 @@ namespace API.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<Feedlot>> Get()
         {
