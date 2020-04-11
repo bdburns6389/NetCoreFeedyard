@@ -36,12 +36,6 @@ ProxyPassReverse / http://127.0.0.1:5000/
 
 ErrorLog /var/log/apache2/reactivities-error.log
 CustomLog /var/log/apache2/reactivities-access.log common
-
-RewriteEngine on
-RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
-RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
-RewriteRule /(.*) ws://127.0.0.1:5000/$1 [P]
-
 </VirtualHost>
 
 6. Enable the site 

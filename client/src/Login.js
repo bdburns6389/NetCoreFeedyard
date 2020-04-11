@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import axios from "axios";
+import agent from "./api/agent";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const baseUrl = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .post(`${baseUrl}/user/login`, {
-        email: email,
-        password: password,
-      })
-      .then((response) => localStorage.setItem("jwt", response.data.token));
+
+    const user = { email, password };
+    var login = await agent.Users.login(user);
+    var jwt = login.data.token;
+    localStorage.setItem("jwt", jwt);
   };
 
   const handleEmailChange = (event) => {

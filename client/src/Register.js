@@ -1,22 +1,18 @@
 import React, { useState } from "react";
-import axios from "axios";
+import agent from "./api/agent";
 import { Link } from "react-router-dom";
 
 const Register = () => {
-  const baseUrl = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  const handleSumbit = (event) => {
+  const handleSumbit = async (event) => {
     event.preventDefault();
-    axios
-      .post(`${baseUrl}/user/register`, {
-        email: email,
-        password: password,
-        username: username,
-      })
-      .then((response) => localStorage.setItem("jwt", response.data.token));
+    const user = { email, password, username };
+    var register = await agent.Users.register(user);
+    var jwt = register.data.token;
+    localStorage.setItem("jwt", jwt);
   };
 
   const handleEmailChange = (event) => {

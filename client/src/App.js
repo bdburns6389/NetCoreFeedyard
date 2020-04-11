@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import agent from "./api/agent";
 import { Link } from "react-router-dom";
 
 function App() {
-  const baseUrl = process.env.REACT_APP_API_URL;
   const [feedlots, setFeedlot] = useState([{}]);
-  const token = localStorage.getItem("jwt");
 
+  // TODO User grid on a separate login page (3 by 3, and the box will be the center one.)
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/feedlot`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setFeedlot(res.data));
-  }, [baseUrl]);
+    const getFeedlots = async () => {
+      const feedlots = await agent.Feedlots.list();
+      setFeedlot(feedlots);
+    };
+    getFeedlots();
+  }, []);
 
   const renderFeedlots = () => {
     return feedlots.map((feedlot) => {
