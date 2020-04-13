@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using API.Domain;
 using API.Domain.Models;
 using API.Security;
@@ -41,14 +42,15 @@ namespace API
             });
 
             services.AddCors(options =>
-                        {
-                            options.AddPolicy("AllowOrigin", policy =>
-                            {
-                                policy.AllowAnyHeader()
-                                    .AllowAnyMethod()
-                                    .AllowAnyOrigin();
-                            });
-                        });
+            {
+                options.AddPolicy("AllowOrigin", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
+                });
+            });
 
             services.AddControllers();
 
@@ -83,6 +85,18 @@ namespace API
                     };
                     // TODO Will need removed if app is hosted on more than one server.
                     opt.SaveToken = true;
+
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();

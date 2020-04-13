@@ -5,7 +5,7 @@ namespace API.Security
 {
     public class RefreshTokenGenerator
     {
-        public string GenerateRefreshToken(int size = 32)
+        public static string GenerateRefreshToken(int size = 32)
         {
             var randomNumber = new byte[size];
             using (var rng = RandomNumberGenerator.Create())

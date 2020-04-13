@@ -1,6 +1,7 @@
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
   (config) => {
@@ -24,6 +25,7 @@ const requests = {
 const Feedlots = {
   list: () => axios.get("/feedlot").then(responseBody),
   details: (id) => requests.get(`/feedlot/${id}`),
+  cookie: () => requests.post("/feedlot/cookie", {}).then(responseBody),
 };
 
 const Users = {

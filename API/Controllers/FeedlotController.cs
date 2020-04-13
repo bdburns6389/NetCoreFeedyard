@@ -31,10 +31,27 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult<List<Feedlot>> Get()
+        public ActionResult<List<string>> Get()
         {
+            var cookie = Request.Cookies["Feedlot"];
+            Console.WriteLine(cookie);
+            Response.Cookies.Append("Feedlot", "Cookieisyum", new Microsoft.AspNetCore.Http.CookieOptions
+            {
+                IsEssential = true,
+                HttpOnly = true
+                //Secure = false
+            });
             var feedlots = _context.Feedlots.ToList();
             return Ok(feedlots);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("cookie")]
+        public ActionResult<string> Cookie()
+        {
+            var cookie = Request.Cookies["Feedlot"];
+            Console.WriteLine(cookie);
+            return Request.Cookies["Feedlot"];
         }
 
         [HttpPost]

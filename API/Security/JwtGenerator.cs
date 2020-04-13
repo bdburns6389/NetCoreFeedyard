@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using API.Controllers;
 using API.Domain.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,7 +21,6 @@ namespace API.Security
             _key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("asdfasdflkqwer8231234"));
         }
 
-
         // TODO Make userId into an AppUser User.
         public string GenerateToken(AppUser user)
         {
@@ -37,7 +34,8 @@ namespace API.Security
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.UtcNow.AddMinutes(1),
+                NotBefore = DateTime.UtcNow,
                 SigningCredentials = signingCreds,
             };
 

@@ -41,7 +41,6 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login(User user)
         {
-
             var currentUser = await _userManager.FindByEmailAsync(user.Email);
 
             if (currentUser == null)
@@ -51,6 +50,14 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                var refreshToken = RefreshTokenGenerator.GenerateRefreshToken();
+
+                Response.Cookies.Append("refresh-token", refreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    IsEssential = true
+                });
+
                 return new User
                 {
                     DisplayName = currentUser.UserName,
