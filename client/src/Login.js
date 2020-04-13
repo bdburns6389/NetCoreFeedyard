@@ -1,26 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import agent from "./api/agent";
 import { Link } from "react-router-dom";
+import { useInputChange } from "./helpers/useInputChange";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [input, handleInputChange] = useInputChange();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const user = { email, password };
-    var login = await agent.Users.login(user);
+    var login = await agent.Users.login(input);
     var jwt = login.data.token;
     localStorage.setItem("jwt", jwt);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
   };
 
   return (
@@ -31,15 +22,15 @@ const Login = () => {
           <input
             type="email"
             name="email"
-            onChange={handleEmailChange}
-            value={email}
+            value={input.email || ""}
+            onChange={handleInputChange}
           ></input>
           <label>Password</label>
           <input
             type="password"
             name="password"
-            onChange={handlePasswordChange}
-            value={password}
+            value={input.password || ""}
+            onChange={handleInputChange}
           ></input>
         </div>
         <button type="submit">Submit</button>
@@ -47,6 +38,7 @@ const Login = () => {
       <Link to="/">
         <button>Main Page</button>
       </Link>
+      <button onClick={() => console.log(input)}>Props</button>
     </div>
   );
 };

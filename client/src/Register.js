@@ -1,30 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import agent from "./api/agent";
 import { Link } from "react-router-dom";
+import { useInputChange } from "./helpers/useInputChange";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [input, handleInputChange] = useInputChange();
 
   const handleSumbit = async (event) => {
     event.preventDefault();
-    const user = { email, password, username };
-    var register = await agent.Users.register(user);
+
+    var register = await agent.Users.register(input);
     var jwt = register.data.token;
     localStorage.setItem("jwt", jwt);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
   };
 
   return (
@@ -35,22 +22,22 @@ const Register = () => {
           <input
             type="email"
             name="email"
-            value={email}
-            onChange={handleEmailChange}
+            value={input.email || ""}
+            onChange={handleInputChange}
           ></input>
           <label>Username</label>
           <input
             type="text"
             name="username"
-            value={username}
-            onChange={handleUsernameChange}
+            value={input.username || ""}
+            onChange={handleInputChange}
           ></input>
           <label>Password</label>
           <input
             type="password"
             name="password"
-            value={password}
-            onChange={handlePasswordChange}
+            value={input.password || ""}
+            onChange={handleInputChange}
           ></input>
         </div>
         <button type="submit">Submit</button>
