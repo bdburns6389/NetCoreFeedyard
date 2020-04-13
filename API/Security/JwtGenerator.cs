@@ -21,7 +21,6 @@ namespace API.Security
             _key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("asdfasdflkqwer8231234"));
         }
 
-        // TODO Make userId into an AppUser User.
         public string GenerateToken(AppUser user)
         {
             var claims = new List<Claim>

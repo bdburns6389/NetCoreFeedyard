@@ -29,18 +29,17 @@ namespace API.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<string>> Get()
         {
-            var cookie = Request.Cookies["Feedlot"];
-            Console.WriteLine(cookie);
-            Response.Cookies.Append("Feedlot", "Cookieisyum", new Microsoft.AspNetCore.Http.CookieOptions
-            {
-                IsEssential = true,
-                HttpOnly = true
-                //Secure = false
-            });
+            // var cookie = Request.Cookies["Feedlot"];
+            // Console.WriteLine(cookie);
+            // Response.Cookies.Append("Feedlot", "Cookieisyum", new Microsoft.AspNetCore.Http.CookieOptions
+            // {
+            //     IsEssential = true,
+            //     HttpOnly = true
+            //     //Secure = false
+            // });
             var feedlots = _context.Feedlots.ToList();
             return Ok(feedlots);
         }

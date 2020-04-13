@@ -4,14 +4,12 @@ import { Link } from "react-router-dom";
 
 function App() {
   const [feedlots, setFeedlot] = useState([{}]);
+  const getFeedlots = async () => {
+    const feedlots = await agent.Feedlots.list();
+    setFeedlot(feedlots);
+  };
 
-  // TODO User grid on a separate login page (3 by 3, and the box will be the center one.)
   useEffect(() => {
-    const getFeedlots = async () => {
-      const feedlots = await agent.Feedlots.list();
-      console.log(feedlots);
-      setFeedlot(feedlots);
-    };
     getFeedlots();
   }, []);
 

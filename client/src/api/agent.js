@@ -1,4 +1,5 @@
 import axios from "axios";
+import { history } from "../index";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
@@ -13,6 +14,17 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+axios.interceptors.response.use(undefined, (error) => {
+  const { status, headers } = error.response;
+  console.log(headers);
+  if (status === 401 && headers["token-expired"] === "true") {
+    // TODO Call refresh token logic here.
+    console.log("Time to get a new token");
+    history.push("/register");
+  }
+  return Promise.reject(error);
+});
 
 const responseBody = (response) => response.data;
 

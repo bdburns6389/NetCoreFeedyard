@@ -4,10 +4,13 @@ import App from "./App";
 import Login from "./Login";
 import Register from "./Register";
 import "./style.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <Router>
+  <Router history={history}>
     <div>
       <Route exact path="/" component={App} />
       <Route exact path="/login" component={Login} />

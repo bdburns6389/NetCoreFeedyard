@@ -52,6 +52,10 @@ namespace API.Controllers
             {
                 var refreshToken = RefreshTokenGenerator.GenerateRefreshToken();
 
+                currentUser.RefreshToken = refreshToken;
+                _context.Update(currentUser);
+                _context.SaveChanges();
+
                 Response.Cookies.Append("refresh-token", refreshToken, new CookieOptions
                 {
                     HttpOnly = true,

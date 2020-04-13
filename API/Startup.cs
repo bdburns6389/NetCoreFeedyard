@@ -46,6 +46,7 @@ namespace API
                 options.AddPolicy("AllowOrigin", policy =>
                 {
                     policy.AllowAnyHeader()
+                    .WithExposedHeaders("Token-Expired")
                         .AllowAnyMethod()
                         .WithOrigins("http://localhost:3000")
                         .AllowCredentials();
@@ -83,7 +84,7 @@ namespace API
                         ValidateIssuer = false,
                         ClockSkew = TimeSpan.Zero,
                     };
-                    // TODO Will need removed if app is hosted on more than one server.
+                    // Will need removed if app is hosted on more than one server.
                     opt.SaveToken = true;
 
                     opt.Events = new JwtBearerEvents
