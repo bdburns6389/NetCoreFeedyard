@@ -19,57 +19,37 @@ namespace API.Controllers
     public class FeedlotController : ControllerBase
     {
         private readonly ILogger<FeedlotController> _logger;
-        private readonly ApplicationDbContext _context;
         private readonly AppSettings _appSettings;
+        private readonly FeedlotService _feedlotService;
 
-        public FeedlotController(ILogger<FeedlotController> logger, IOptions<AppSettings> appSettings, ApplicationDbContext context)
+        public FeedlotController(ILogger<FeedlotController> logger,
+            IOptions<AppSettings> appSettings,
+            FeedlotService feedlotService)
         {
             _logger = logger;
             _appSettings = appSettings.Value;
-            _context = context;
+            _feedlotService = feedlotService;
         }
 
+        //[Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<string>> Get()
         {
-            // var cookie = Request.Cookies["Feedlot"];
-            // Console.WriteLine(cookie);
-            // Response.Cookies.Append("Feedlot", "Cookieisyum", new Microsoft.AspNetCore.Http.CookieOptions
-            // {
-            //     IsEssential = true,
-            //     HttpOnly = true
-            //     //Secure = false
-            // });
-            var feedlots = _context.Feedlots.ToList();
+            var feedlots = _feedlotService.GetAll();
             return Ok(feedlots);
         }
 
         [AllowAnonymous]
-        [HttpPost("cookie")]
-        public ActionResult<string> Cookie()
-        {
-            var cookie = Request.Cookies["Feedlot"];
-            Console.WriteLine(cookie);
-            return Request.Cookies["Feedlot"];
-        }
-
         [HttpPost]
         public async Task<ActionResult<Feedlot>> Post(Feedlot feedlot)
         {
-            var existingFeedlot = _context.Feedlots.Any(c => c.Name == feedlot.Name);
-            // If a feedlot already exists, Conflit() returns a 409 error.
+            var existingFeedlot = _feedlotService.FindExisting(feedlot.Name);
+
             if (existingFeedlot)
                 return Conflict("This feedlot already exists");
 
-            var newFeedlot = new Feedlot
-            {
-                Name = feedlot.Name,
-                Owner = feedlot.Owner,
-                Summary = feedlot.Summary
-            };
-
-            _context.Feedlots.Add(newFeedlot);
-            await _context.SaveChangesAsync();
+            var newFeedlot = await _feedlotService.Create(feedlot);
 
             var resourceUrl = Path.Combine(Request.Path.ToString(), Uri.EscapeUriString(newFeedlot.Name));
 

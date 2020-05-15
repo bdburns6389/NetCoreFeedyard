@@ -101,6 +101,7 @@ namespace API
                 });
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<FeedlotService>();
 
             //services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
         }

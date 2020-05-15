@@ -24,9 +24,9 @@ namespace API.Security
         public string GenerateToken(AppUser user)
         {
             var claims = new List<Claim>
-           {
-               new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
-           };
+            {
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
 
             var signingCreds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

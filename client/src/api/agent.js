@@ -1,5 +1,6 @@
 import axios from "axios";
 import { history } from "../index";
+import Axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
@@ -15,14 +16,28 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(undefined, (error) => {
+// undefined would be the function for any 200 level response codes.
+axios.interceptors.response.use(undefined, async (error) => {
   const { status, headers } = error.response;
-  console.log(headers);
+
   if (status === 401 && headers["token-expired"] === "true") {
-    // TODO Call refresh token logic here.
-    console.log("Time to get a new token");
-    history.push("/register");
+    const jwt = localStorage.getItem("jwt");
+    const response = await axios.post("user/getnewtoken", { jwt });
+
+    if (!response.status === 200) {
+      history.push("/login");
+      alert("Your session has expired, please login again.");
+    }
+
+    localStorage.setItem("jwt", response.data.jwtToken);
+    return Axios.request(error.config);
   }
+
+  if (status === 401) {
+    history.push("/login");
+    alert("Your session has expired, please login again.");
+  }
+
   return Promise.reject(error);
 });
 

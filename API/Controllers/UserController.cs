@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Domain;
+using API.Domain.Dto;
 using API.Domain.Models;
 using API.Security;
 using Microsoft.AspNetCore.Authorization;
@@ -130,14 +131,5 @@ namespace API.Controllers
                 Password = "Wouldn't you like to know"
             };
         }
-    }
-
-    public class User
-    {
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Token { get; set; }
     }
 }

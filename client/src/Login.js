@@ -38,7 +38,6 @@ const Login = () => {
       <Link to="/">
         <button>Main Page</button>
       </Link>
-      <button onClick={() => console.log(input)}>Props</button>
     </div>
   );
 };

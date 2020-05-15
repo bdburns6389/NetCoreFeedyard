@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Custom hook for handling input changes in forms.
 export const useInputChange = () => {
   const [input, setInput] = useState({});
 

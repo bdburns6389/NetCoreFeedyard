@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import agent from "./api/agent";
 import { Link } from "react-router-dom";
 
-function App() {
+const App = () => {
   const [feedlots, setFeedlot] = useState([{}]);
+
   const getFeedlots = async () => {
     const feedlots = await agent.Feedlots.list();
     setFeedlot(feedlots);
@@ -13,24 +14,17 @@ function App() {
     getFeedlots();
   }, []);
 
-  // const renderFeedlots = () => {
-  //   return feedlots.map((feedlot) => {
-  //     return <div>{feedlot.name}</div>;
-  //   });
-  // };
-
-  const cookies = async () => {
-    var cookie = await agent.Feedlots.cookie();
-    console.log(cookie);
+  const renderFeedlots = () => {
+    if (!feedlots) return <div>Loading...</div>;
+    return feedlots.map((feedlot) => (
+      <div key={feedlot.id}>{feedlot.name}</div>
+    ));
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        {/* {renderFeedlots()} */}
-
-        <button onClick={() => alert(JSON.stringify(feedlots))}>Click</button>
-        <button onClick={() => cookies()}>Cookie</button>
+        {renderFeedlots()}
         <Link to="/login">
           <button>Login</button>
         </Link>
@@ -40,6 +34,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
